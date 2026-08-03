@@ -55,6 +55,7 @@ export default function AdminLoginPage() {
             className="rounded-lg mb-3"
           />
           <h1 className="text-white text-lg font-bold">مدرسة العنقاء</h1>
+          <p className="text-navy-300 text-xs mb-1">Phoenix School</p>
           <p className="text-navy-100 text-sm">لوحة تحكم الإدارة</p>
         </div>
 
