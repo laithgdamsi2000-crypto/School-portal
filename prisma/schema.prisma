@@ -108,6 +108,16 @@ model Grade {
   order     Int      @default(0) // controls display order
   createdAt DateTime @default(now())
 
+  // Class timetable ("الجداول") -- at most one per grade, a plain image or
+  // PDF the admin uploads. Not a separate table (unlike HomeworkFile/
+  // AnnouncementFile) because it's a strict 1:1: uploading a new one
+  // replaces the previous file rather than accumulating a list.
+  scheduleFileName   String?
+  scheduleFileUrl    String?
+  scheduleFileType   String?
+  scheduleFileSizeKb Int?
+  scheduleUpdatedAt  DateTime?
+
   homeworks     Homework[]
   announcements Announcement[]
   subjects      Subject[]

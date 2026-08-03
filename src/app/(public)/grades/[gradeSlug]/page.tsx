@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import { FileText, Download } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { HomeworkCard } from "@/components/public/HomeworkCard";
 
@@ -36,6 +38,47 @@ export default async function GradeDetailPage({ params }: Props) {
         <span className="text-navy-700 font-medium">{grade.name}</span>
       </div>
       <h1 className="text-xl font-bold text-navy-900 mb-8">{grade.name}</h1>
+
+      <section className="mb-10">
+        <h2 className="text-sm font-bold text-navy-700 mb-4">الجداول</h2>
+        {grade.scheduleFileUrl ? (
+          grade.scheduleFileType === "image" ? (
+            <a
+              href={grade.scheduleFileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block bg-white rounded-card shadow-card hover:shadow-card-hover transition p-3"
+            >
+              <Image
+                src={grade.scheduleFileUrl}
+                alt={`جدول حصص ${grade.name}`}
+                width={900}
+                height={600}
+                className="w-full h-auto rounded-control"
+              />
+            </a>
+          ) : (
+            <a
+              href={grade.scheduleFileUrl}
+              download
+              className="flex items-center gap-4 bg-white rounded-card shadow-card hover:shadow-card-hover transition p-5"
+            >
+              <div className="w-11 h-11 rounded-control bg-navy-50 text-navy-700 flex items-center justify-center shrink-0">
+                <FileText size={20} strokeWidth={2} aria-hidden="true" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-navy-900 truncate">{grade.scheduleFileName}</p>
+                <p className="text-xs text-navy-500 mt-0.5">اضغط لتحميل جدول الحصص</p>
+              </div>
+              <Download size={18} strokeWidth={2} className="text-navy-500 shrink-0" aria-hidden="true" />
+            </a>
+          )
+        ) : (
+          <p className="text-sm text-navy-300 py-8 text-center bg-white rounded-card shadow-card">
+            لم يتم رفع جدول حصص لهذا الصف بعد
+          </p>
+        )}
+      </section>
 
       <section className="mb-10">
         <h2 className="text-sm font-bold text-navy-700 mb-4">الواجبات</h2>
