@@ -59,7 +59,7 @@ export default async function HomePage() {
           <div className="flex items-center justify-center gap-3.5 flex-wrap animate-fade-in-up [animation-delay:300ms]">
             <Link
               href="/homework"
-              className="bg-gold-500 hover:bg-gold-700 text-navy-900 hover:text-white font-bold rounded-control px-7 py-3.5 text-sm transition duration-300 hover:-translate-y-0.5"
+              className="bg-gold-500 hover:bg-gold-700 text-[#221d4d] hover:text-white font-bold rounded-control px-7 py-3.5 text-sm transition duration-300 hover:-translate-y-0.5"
             >
               تصفح واجبات اليوم
             </Link>

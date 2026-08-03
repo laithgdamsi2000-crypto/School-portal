@@ -2,6 +2,7 @@
 // Brand: مدرسة العنقاء (Al-Anqa / "Phoenix" School)
 // Colors sampled from the school's phoenix logo — indigo-navy body, warm gold wings.
 module.exports = {
+  darkMode: "class",
   content: [
     "./src/app/**/*.{ts,tsx}",
     "./src/components/**/*.{ts,tsx}",
