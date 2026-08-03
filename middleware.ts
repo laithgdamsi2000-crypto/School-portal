@@ -15,6 +15,11 @@ export default withAuth(
   {
     callbacks: {
       authorized: ({ req, token }) => {
+        // Always allow the login page itself through unauthenticated —
+        // otherwise this creates a redirect loop: blocked here -> redirect
+        // to /admin/login -> blocked here again -> forever.
+        if (req.nextUrl.pathname === "/admin/login") return true;
+
         // /admin/* pages: always require an admin session.
         if (req.nextUrl.pathname.startsWith("/admin")) {
           return !!token && (token as any).role === "admin";
@@ -37,7 +42,7 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    "/admin/((?!login).*)", // everything under /admin except the login page itself
+    "/admin/:path*", // includes /admin/login — now safely allowed inside the callback above
     "/api/homework/:path*",
     "/api/announcements/:path*",
     "/api/files/:path*",
