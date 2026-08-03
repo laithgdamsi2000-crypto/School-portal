@@ -16,7 +16,6 @@ import { prisma } from "./prisma";
  *    the existing provider's `authorize` callback.
  */
 export const authOptions: NextAuthOptions = {
-  trustHost: true,
   session: {
     strategy: "jwt",
     maxAge: 8 * 60 * 60, // 8 hours — admin sessions expire, must re-login
