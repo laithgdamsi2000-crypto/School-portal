@@ -276,6 +276,7 @@ model AnnouncementFile {
 model SiteSettings {
   id             String   @id @default(cuid())
   welcomeMessage String   @db.Text
+  aboutText      String   @db.Text
   address        String
   phone          String
   email          String
