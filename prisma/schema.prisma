@@ -234,6 +234,26 @@ model AnnouncementFile {
 }
 
 // ------------------------------------------------------------
+// SITE CONTENT — admin-editable via /admin/settings. Always exactly one
+// row (a soft singleton: the app finds-or-creates the first row rather
+// than relying on a fixed id). Lets the homepage welcome message and the
+// Contact page's address/phone/email/map location be edited without a
+// code change or redeploy.
+// ------------------------------------------------------------
+
+model SiteSettings {
+  id             String   @id @default(cuid())
+  welcomeMessage String   @db.Text
+  address        String
+  phone          String
+  email          String
+  mapQuery       String // free-text place name/address used to build the embedded Google Maps link
+  updatedAt      DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+// ------------------------------------------------------------
 // NOTIFICATIONS (architecture only — see lib/notifications.ts)
 // ------------------------------------------------------------
 

@@ -51,5 +51,6 @@ export const config = {
     "/api/teachers/:path*",
     "/api/admin/:path*",
     "/api/admins/:path*",
+    "/api/settings/:path*",
   ],
 };

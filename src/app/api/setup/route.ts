@@ -92,6 +92,20 @@ export async function GET(req: NextRequest) {
       create: { name: "مدير المدرسة", email: adminEmail, passwordHash },
     });
 
+    const existingSettings = await prisma.siteSettings.findFirst();
+    if (!existingSettings) {
+      await prisma.siteSettings.create({
+        data: {
+          welcomeMessage:
+            "أهلاً وسهلاً بكم في بوابة مدرسة العنقاء الإلكترونية — نتمنى لأبنائنا الطلاب عاماً دراسياً موفقاً.",
+          address: "طرابلس، ليبيا",
+          phone: "+218 XX-XXX-XXXX",
+          email: adminEmail,
+          mapQuery: "طرابلس، ليبيا",
+        },
+      });
+    }
+
     return new NextResponse(
       htmlPage(
         "تم الإعداد بنجاح ✓",
