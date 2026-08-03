@@ -8,7 +8,7 @@ import { z } from "zod";
  * queries — this layer stops bad data from ever reaching that point).
  */
 
-export const homeworkCreateSchema = z.object({
+const homeworkBaseSchema = z.object({
   title: z.string().min(3, "العنوان قصير جداً").max(200),
   description: z.string().min(5, "الوصف قصير جداً").max(5000),
   status: z.enum(["NORMAL", "IMPORTANT"]).default("NORMAL"),
@@ -17,25 +17,36 @@ export const homeworkCreateSchema = z.object({
   teacherId: z.string().cuid().optional().nullable(),
   assignedDate: z.coerce.date(),
   dueDate: z.coerce.date(),
-}).refine((data) => data.dueDate >= data.assignedDate, {
-  message: "تاريخ التسليم يجب أن يكون بعد تاريخ التكليف",
-  path: ["dueDate"],
 });
 
-export const homeworkUpdateSchema = homeworkCreateSchema.partial();
+export const homeworkCreateSchema = homeworkBaseSchema.refine(
+  (data) => data.dueDate >= data.assignedDate,
+  {
+    message: "تاريخ التسليم يجب أن يكون بعد تاريخ التكليف",
+    path: ["dueDate"],
+  }
+);
 
-export const announcementCreateSchema = z.object({
+// .partial() only exists on ZodObject, not on the ZodEffects that .refine()
+// returns — so the update schema is built from the base object directly,
+// skipping the refine check (an update may only touch some fields, so the
+// full date-order check doesn't apply the same way here).
+export const homeworkUpdateSchema = homeworkBaseSchema.partial();
+
+const announcementBaseSchema = z.object({
   title: z.string().min(3).max(200),
   content: z.string().min(5).max(5000),
   scope: z.enum(["SCHOOL_WIDE", "GRADE_SPECIFIC"]),
   isImportant: z.boolean().default(false),
   gradeId: z.string().cuid().optional().nullable(),
-}).refine(
+});
+
+export const announcementCreateSchema = announcementBaseSchema.refine(
   (data) => data.scope === "SCHOOL_WIDE" || !!data.gradeId,
   { message: "يجب تحديد الصف عند اختيار إعلان خاص بصف معين", path: ["gradeId"] }
 );
 
-export const announcementUpdateSchema = announcementCreateSchema.partial();
+export const announcementUpdateSchema = announcementBaseSchema.partial();
 
 export const gradeCreateSchema = z.object({
   name: z.string().min(2).max(50),
