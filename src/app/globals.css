@@ -53,3 +53,14 @@ body {
   unicode-bidi: isolate;
   font-variant-numeric: tabular-nums;
 }
+
+/* Homepage entrance/scroll animations (Reveal, CountUp, hero fade-in-up)
+   are all decorative -- users who've asked their OS for reduced motion
+   get the end state instantly instead. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
