@@ -49,5 +49,6 @@ export const config = {
     "/api/grades/:path*",
     "/api/subjects/:path*",
     "/api/teachers/:path*",
+    "/api/admin/:path*",
   ],
 };

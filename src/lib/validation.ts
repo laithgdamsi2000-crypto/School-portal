@@ -69,6 +69,11 @@ export const teacherUpdateSchema = teacherCreateSchema.partial().extend({
   isActive: z.boolean().optional(),
 });
 
+export const passwordChangeSchema = z.object({
+  currentPassword: z.string().min(1, "أدخل كلمة المرور الحالية"),
+  newPassword: z.string().min(8, "كلمة المرور الجديدة يجب أن تكون 8 أحرف على الأقل"),
+});
+
 export const searchQuerySchema = z.object({
   q: z.string().max(200).default(""),
   gradeId: z.string().cuid().optional(),
