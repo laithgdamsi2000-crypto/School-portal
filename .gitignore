@@ -1,0 +1,27 @@
+# Dependencies
+/node_modules
+
+# Next.js build output
+/.next/
+/out/
+
+# Environment variables — NEVER commit real secrets
+.env
+.env.local
+.env.production
+
+# Prisma
+/prisma/dev.db
+
+# Uploaded files (local dev only — production uses cloud storage per lib/upload.ts)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# OS/editor junk
+.DS_Store
+*.log
+.vscode/
+
+# This project's scratch preview files — not part of the deployed app
+preview-*.html
+full-site-preview.html
