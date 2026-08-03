@@ -50,5 +50,6 @@ export const config = {
     "/api/subjects/:path*",
     "/api/teachers/:path*",
     "/api/admin/:path*",
+    "/api/admins/:path*",
   ],
 };

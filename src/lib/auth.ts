@@ -39,9 +39,9 @@ export const authOptions: NextAuthOptions = {
           where: { email: credentials.email.toLowerCase().trim() },
         });
 
-        if (!admin) {
+        if (!admin || !admin.isActive) {
           // Same generic failure path as a wrong password below —
-          // never reveal whether the email exists.
+          // never reveal whether the email exists or is deactivated.
           return null;
         }
 

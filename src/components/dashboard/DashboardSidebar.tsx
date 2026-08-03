@@ -10,6 +10,7 @@ import {
   Megaphone,
   FolderOpen,
   School,
+  Users,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -20,6 +21,7 @@ const NAV_ITEMS = [
   { href: "/admin/announcements", label: "الإعلانات", Icon: Megaphone },
   { href: "/admin/files", label: "إدارة الملفات", Icon: FolderOpen },
   { href: "/admin/grades", label: "الصفوف والمواد", Icon: School },
+  { href: "/admin/admins", label: "المديرون", Icon: Users },
   { href: "/admin/settings", label: "الإعدادات", Icon: Settings },
 ];
 

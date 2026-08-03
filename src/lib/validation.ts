@@ -74,6 +74,16 @@ export const passwordChangeSchema = z.object({
   newPassword: z.string().min(8, "كلمة المرور الجديدة يجب أن تكون 8 أحرف على الأقل"),
 });
 
+export const adminCreateSchema = z.object({
+  name: z.string().min(2).max(100),
+  email: z.string().email(),
+  password: z.string().min(8, "كلمة المرور يجب أن تكون 8 أحرف على الأقل"),
+});
+
+export const adminUpdateSchema = z.object({
+  isActive: z.boolean(),
+});
+
 export const searchQuerySchema = z.object({
   q: z.string().max(200).default(""),
   gradeId: z.string().cuid().optional(),
