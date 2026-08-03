@@ -14,7 +14,7 @@ const NAV_LINKS = [
 
 export function PublicHeader() {
   return (
-    <header className="bg-white border-b border-navy-50 sticky top-0 z-10">
+    <header className="bg-white/90 backdrop-blur-sm border-b border-navy-50 sticky top-0 z-10">
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3.5">
         <Link href="/" className="flex items-center gap-3">
           <Image
@@ -26,7 +26,7 @@ export function PublicHeader() {
           />
           <div>
             <p className="font-bold text-sm text-navy-900">مدرسة العنقاء</p>
-            <p className="text-xs text-navy-500">البوابة الإلكترونية</p>
+            <p className="text-xs text-navy-500">Phoenix School</p>
           </div>
         </Link>
 

@@ -13,6 +13,7 @@ import {
   Users,
   Settings,
   LogOut,
+  Home,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -40,11 +41,22 @@ export function DashboardSidebar({ adminName }: { adminName: string }) {
         />
         <div>
           <p className="font-bold text-sm">مدرسة العنقاء</p>
-          <p className="text-navy-300 text-xs">لوحة التحكم</p>
+          <p className="text-navy-300 text-xs">Phoenix School</p>
         </div>
       </div>
 
-      <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
+      <div className="px-3 pt-4">
+        <Link
+          href="/"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-control text-sm font-medium text-navy-100 hover:bg-white/5 transition"
+        >
+          <Home size={18} strokeWidth={2} aria-hidden="true" />
+          العودة للموقع
+        </Link>
+      </div>
+      <div className="mx-3 my-2 border-t border-white/10" />
+
+      <nav className="flex-1 px-3 pb-4 flex flex-col gap-1">
         {NAV_ITEMS.map((item) => {
           const active =
             item.href === "/admin"
