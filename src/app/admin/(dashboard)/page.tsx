@@ -65,7 +65,7 @@ export default async function AdminDashboardPage() {
               href={a.href}
               className={`px-4 py-2.5 rounded-control text-sm font-medium transition ${
                 a.primary
-                  ? "bg-gold-500 text-navy-900 hover:bg-gold-700 hover:text-white"
+                  ? "bg-gold-500 text-[#221d4d] hover:bg-gold-700 hover:text-white"
                   : "bg-navy-50 text-navy-700 hover:bg-navy-100"
               }`}
             >

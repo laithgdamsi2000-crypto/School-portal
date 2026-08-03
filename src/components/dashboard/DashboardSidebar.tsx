@@ -15,6 +15,7 @@ import {
   LogOut,
   Home,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const NAV_ITEMS = [
   { href: "/admin", label: "الرئيسية", Icon: LayoutDashboard },
@@ -39,10 +40,11 @@ export function DashboardSidebar({ adminName }: { adminName: string }) {
           height={38}
           className="rounded-lg"
         />
-        <div>
+        <div className="flex-1">
           <p className="font-bold text-sm">مدرسة العنقاء</p>
           <p className="text-navy-300 text-xs">Phoenix School</p>
         </div>
+        <ThemeToggle className="w-8 h-8 flex items-center justify-center rounded-control text-navy-100 hover:bg-white/5 transition shrink-0" />
       </div>
 
       <div className="px-3 pt-4">
@@ -68,7 +70,7 @@ export function DashboardSidebar({ adminName }: { adminName: string }) {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-control text-sm font-medium transition ${
                 active
-                  ? "bg-gold-500 text-navy-900"
+                  ? "bg-gold-500 text-[#221d4d]"
                   : "text-navy-100 hover:bg-white/5"
               }`}
             >

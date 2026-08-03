@@ -17,7 +17,7 @@ export default async function AdminAnnouncementsListPage() {
         </div>
         <Link
           href="/admin/announcements/new"
-          className="bg-gold-500 hover:bg-gold-700 hover:text-white text-navy-900 font-medium rounded-control px-5 py-2.5 text-sm transition"
+          className="bg-gold-500 hover:bg-gold-700 hover:text-white text-[#221d4d] font-medium rounded-control px-5 py-2.5 text-sm transition"
         >
           + إضافة إعلان
         </Link>

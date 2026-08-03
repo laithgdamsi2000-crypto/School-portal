@@ -113,7 +113,7 @@ export function GradeSchedulesManager({ initialGrades }: { initialGrades: GradeW
           <p className="text-sm font-bold text-navy-900 mb-2">{g.name}</p>
           <div className="flex flex-col gap-2">
             {g.sections.map((s) => (
-              <div key={s.id} className="flex flex-col gap-2 bg-navy-50/50 rounded-control px-3 py-2">
+              <div key={s.id} className="flex flex-col gap-2 bg-navy-50/50 dark:bg-white/5 rounded-control px-3 py-2">
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0 flex items-center gap-2">
                     <span className="text-xs font-medium text-navy-700 bg-white border border-navy-100 rounded-control w-7 h-7 flex items-center justify-center shrink-0">

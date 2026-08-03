@@ -27,6 +27,7 @@ body {
   font-family: var(--font-tajawal), Tahoma, sans-serif;
   color: theme("colors.navy.900");
   background-color: #fafbfc;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Scrollbar styling matches brand rather than default gray (light touch,
@@ -37,6 +38,115 @@ body {
 ::-webkit-scrollbar-thumb {
   background: theme("colors.navy.300");
   border-radius: 999px;
+}
+
+/* ------------------------------------------------------------
+   Dark mode. Toggled by ThemeToggle.tsx adding/removing "dark" on
+   <html> (see the inline script in layout.tsx for the no-flash-on-load
+   read of localStorage).
+
+   This retargets the SAME navy/gold/sky utility classes already used
+   everywhere (bg-white, text-navy-900, bg-navy-50, ...) instead of
+   adding a "dark:" variant to every individual className across 30+
+   files -- one file gets every card/text/border color for free, and
+   any future component that reuses these same classes is automatically
+   dark-mode-correct with no extra work.
+
+   Exception: a handful of spots use text-navy-900 as button text on a
+   permanently-light gold background (e.g. the active sidebar nav item,
+   the homepage hero CTA) -- those use an arbitrary-value class
+   (text-[#221d4d]) instead of text-navy-900 specifically so they are
+   NOT caught by the .dark .text-navy-900 rule below and stay dark
+   regardless of theme, since gold-500 never changes between modes.
+   Surfaces that are already permanently dark in light mode (the hero,
+   footer, admin sidebar, login page -- all bg-navy-900) are untouched
+   here for the same reason: they don't need a dark-mode variant, they
+   already are one.
+------------------------------------------------------------ */
+
+.dark body {
+  background-color: #15122b;
+  color: #f1eefc;
+}
+
+.dark .bg-white {
+  background-color: #1c1836;
+}
+.dark .text-navy-900 {
+  color: #f1eefc;
+}
+.dark .text-navy-700 {
+  color: #cdc5ec;
+}
+.dark .text-navy-500 {
+  color: #9d92c9;
+}
+.dark .text-navy-300 {
+  color: #766aa3;
+}
+
+.dark .bg-navy-50 {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.dark .bg-navy-100 {
+  background-color: rgba(255, 255, 255, 0.09);
+}
+.dark .hover\:bg-navy-50:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.dark .hover\:bg-navy-100:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark .border-navy-50 {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.dark .border-navy-100 {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.dark .divide-navy-50 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .shadow-card {
+  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.5), 0 1px 3px -1px rgba(0, 0, 0, 0.4);
+}
+.dark .shadow-card-hover {
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.55), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
+}
+
+.dark .bg-gold-50 {
+  background-color: rgba(232, 171, 53, 0.12);
+}
+.dark .bg-red-50 {
+  background-color: rgba(194, 59, 59, 0.16);
+}
+.dark .bg-green-50 {
+  background-color: rgba(47, 125, 79, 0.16);
+}
+.dark .bg-sky-50 {
+  background-color: rgba(91, 155, 213, 0.16);
+}
+.dark .border-gold-300 {
+  border-color: rgba(242, 202, 110, 0.35);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Form fields never set an explicit background in this codebase (they
+   rely on the browser's default white) -- without this they'd render
+   as bright white boxes floating inside a dark card. */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #1c1836;
+  color: #f1eefc;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #766aa3;
 }
 
 /* Focus rings: visible for keyboard users, gold to match brand accent,
