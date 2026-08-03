@@ -1,6 +1,9 @@
 import Image from "next/image";
+import { getSiteSettings } from "@/lib/site-settings";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const settings = await getSiteSettings();
+
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
       <div className="flex items-center gap-4 mb-8">
@@ -18,12 +21,7 @@ export default function AboutPage() {
       </div>
 
       <div className="bg-white rounded-card shadow-card p-8 text-navy-700 text-sm leading-8">
-        <p>
-          مدرسة العنقاء مدرسة خاصة تلتزم بتقديم تعليم متميز يجمع بين الأصالة والحداثة،
-          ونسعى من خلال هذه البوابة الإلكترونية لتسهيل التواصل بين المدرسة وأولياء الأمور
-          والطلاب، من خلال إتاحة الواجبات اليومية والإعلانات والملفات المهمة في مكان واحد
-          يسهل الوصول إليه في أي وقت.
-        </p>
+        <p className="whitespace-pre-line">{settings.aboutText}</p>
       </div>
     </div>
   );

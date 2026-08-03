@@ -4,6 +4,7 @@ import { useState } from "react";
 
 interface SiteSettings {
   welcomeMessage: string;
+  aboutText: string;
   address: string;
   phone: string;
   email: string;
@@ -12,6 +13,7 @@ interface SiteSettings {
 
 export function SiteSettingsForm({ initial }: { initial: SiteSettings }) {
   const [welcomeMessage, setWelcomeMessage] = useState(initial.welcomeMessage);
+  const [aboutText, setAboutText] = useState(initial.aboutText);
   const [address, setAddress] = useState(initial.address);
   const [phone, setPhone] = useState(initial.phone);
   const [email, setEmail] = useState(initial.email);
@@ -31,7 +33,7 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettings }) {
       const res = await fetch("/api/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ welcomeMessage, address, phone, email, mapQuery }),
+        body: JSON.stringify({ welcomeMessage, aboutText, address, phone, email, mapQuery }),
       });
       if (!res.ok) {
         const body = await res.json();
@@ -70,6 +72,18 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettings }) {
           rows={4}
           value={welcomeMessage}
           onChange={(e) => setWelcomeMessage(e.target.value)}
+          required
+        />
+      </div>
+
+      <div>
+        <label className={labelClass} htmlFor="aboutText">نص "عن المدرسة"</label>
+        <textarea
+          id="aboutText"
+          className={inputClass}
+          rows={5}
+          value={aboutText}
+          onChange={(e) => setAboutText(e.target.value)}
           required
         />
       </div>

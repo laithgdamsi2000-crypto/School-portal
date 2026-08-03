@@ -276,6 +276,12 @@ model AnnouncementFile {
 model SiteSettings {
   id             String   @id @default(cuid())
   welcomeMessage String   @db.Text
+  // Has a @default unlike the other fields here: this column is being
+  // added to a table that may already have a saved row in production
+  // (from the settings form introduced earlier). Without a default,
+  // `prisma db push` can't backfill a required column on a non-empty
+  // table in a non-interactive build and the deploy fails outright.
+  aboutText      String   @default("مدرسة العنقاء مدرسة خاصة تلتزم بتقديم تعليم متميز يجمع بين الأصالة والحداثة، ونسعى من خلال هذه البوابة الإلكترونية لتسهيل التواصل بين المدرسة وأولياء الأمور والطلاب، من خلال إتاحة الواجبات اليومية والإعلانات والملفات المهمة في مكان واحد يسهل الوصول إليه في أي وقت.") @db.Text
   address        String
   phone          String
   email          String

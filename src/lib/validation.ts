@@ -86,6 +86,7 @@ export const adminUpdateSchema = z.object({
 
 export const siteSettingsUpdateSchema = z.object({
   welcomeMessage: z.string().min(5, "رسالة الترحيب قصيرة جداً").max(2000),
+  aboutText: z.string().min(5, "نص \"عن المدرسة\" قصير جداً").max(4000),
   address: z.string().min(2, "العنوان قصير جداً").max(200),
   phone: z.string().min(2, "رقم الهاتف قصير جداً").max(30),
   email: z.string().email("بريد إلكتروني غير صالح"),
