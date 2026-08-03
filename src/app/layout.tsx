@@ -17,8 +17,3 @@ export default function RootLayout({
     </html>
   );
 }
-    <html lang="ar" dir="rtl">
-      <body>{children}</body>
-    </html>
-  );
-}
