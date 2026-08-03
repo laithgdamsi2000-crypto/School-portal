@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------
+   RTL is set at the HTML level (see layout.tsx: <html dir="rtl" lang="ar">).
+   These rules handle the few cases Tailwind's logical-property utilities
+   don't cover automatically, and set the Arabic font stack globally.
+------------------------------------------------------------ */
+
+@font-face {
+  font-family: "Tajawal";
+  src: url("https://fonts.gstatic.com/s/tajawal/v9/Iurf6YBj_oCad4k1l5QjrQ.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --font-tajawal: "Tajawal", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-tajawal), Tahoma, sans-serif;
+  color: theme("colors.navy.900");
+  background-color: #fafbfc;
+}
+
+/* Scrollbar styling matches brand rather than default gray (light touch,
+   applied globally so admin tables and long homework lists feel consistent) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: theme("colors.navy.300");
+  border-radius: 999px;
+}
+
+/* Focus rings: visible for keyboard users, gold to match brand accent,
+   never removed outright (accessibility requirement, not optional) */
+:focus-visible {
+  outline: 2px solid theme("colors.gold.500");
+  outline-offset: 2px;
+}
+
+/* Utility used by admin tables/date inputs where digits should NOT
+   mirror even though surrounding text is RTL */
+.ltr-nums {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
