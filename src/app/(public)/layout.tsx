@@ -1,5 +1,6 @@
 import { PublicHeader } from "@/components/public/PublicHeader";
 import { PublicFooter } from "@/components/public/PublicFooter";
+import { PageTransition } from "@/components/ui/PageTransition";
 
 /**
  * Wraps every page under (public) — a route group, so it doesn't add
@@ -11,7 +12,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   return (
     <>
       <PublicHeader />
-      {children}
+      <PageTransition>{children}</PageTransition>
       <PublicFooter />
     </>
   );

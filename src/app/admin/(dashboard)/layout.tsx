@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import { authOptions } from "@/lib/auth";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { PageTransition } from "@/components/ui/PageTransition";
 
 /**
  * Wraps every page in the (dashboard) route group — /admin, /admin/homework,
@@ -34,7 +35,9 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen bg-navy-50 flex">
       <DashboardSidebar adminName={session.user?.name ?? "الإدارة"} />
-      <main className="flex-1 p-6 md:p-8">{children}</main>
+      <main className="flex-1 p-6 md:p-8">
+        <PageTransition>{children}</PageTransition>
+      </main>
     </div>
   );
 }
