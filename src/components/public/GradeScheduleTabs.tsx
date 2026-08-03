@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { FileText, Download } from "lucide-react";
+import { FileText, Download, Info } from "lucide-react";
 
 interface Section {
   id: string;
@@ -10,6 +10,7 @@ interface Section {
   scheduleFileName: string | null;
   scheduleFileUrl: string | null;
   scheduleFileType: string | null;
+  note: string | null;
 }
 
 /**
@@ -41,6 +42,16 @@ export function GradeScheduleTabs({ sections, gradeName }: { sections: Section[]
           </button>
         ))}
       </div>
+
+      {active.note && (
+        <div className="flex gap-3 bg-gold-50 border border-gold-300 rounded-card p-4 mb-4">
+          <Info size={18} strokeWidth={2} className="text-gold-700 shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <p className="text-xs font-bold text-navy-900 mb-1">ملاحظة — شعبة {active.name}</p>
+            <p className="text-sm text-navy-700 whitespace-pre-line">{active.note}</p>
+          </div>
+        </div>
+      )}
 
       {active.scheduleFileUrl ? (
         active.scheduleFileType === "image" ? (
