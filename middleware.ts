@@ -47,5 +47,8 @@ export const config = {
     "/api/announcements/:path*",
     "/api/files/:path*",
     "/api/grades/:path*",
+    "/api/subjects/:path*",
+    "/api/teachers/:path*",
+    "/api/admin/:path*",
   ],
 };
