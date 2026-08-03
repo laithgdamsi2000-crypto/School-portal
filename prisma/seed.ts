@@ -79,6 +79,21 @@ async function main() {
     },
   });
 
+  console.log("Seeding default site settings...");
+  const existingSettings = await prisma.siteSettings.findFirst();
+  if (!existingSettings) {
+    await prisma.siteSettings.create({
+      data: {
+        welcomeMessage:
+          "أهلاً وسهلاً بكم في بوابة مدرسة العنقاء الإلكترونية — نتمنى لأبنائنا الطلاب عاماً دراسياً موفقاً، ونحرص على إبقائكم على اطلاع دائم بكل ما يخص واجباتهم وإعلانات المدرسة.",
+        address: "طرابلس، ليبيا",
+        phone: "+218 XX-XXX-XXXX",
+        email: "info@phoenix-school.ly",
+        mapQuery: "طرابلس، ليبيا",
+      },
+    });
+  }
+
   console.log("Done.");
   console.log(`Admin login: ${adminEmail} / ${adminPassword} (change this password immediately)`);
 }

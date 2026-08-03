@@ -84,6 +84,14 @@ export const adminUpdateSchema = z.object({
   isActive: z.boolean(),
 });
 
+export const siteSettingsUpdateSchema = z.object({
+  welcomeMessage: z.string().min(5, "رسالة الترحيب قصيرة جداً").max(2000),
+  address: z.string().min(2, "العنوان قصير جداً").max(200),
+  phone: z.string().min(2, "رقم الهاتف قصير جداً").max(30),
+  email: z.string().email("بريد إلكتروني غير صالح"),
+  mapQuery: z.string().min(2, "حدد موقعاً على الخريطة").max(300),
+});
+
 export const searchQuerySchema = z.object({
   q: z.string().max(200).default(""),
   gradeId: z.string().cuid().optional(),

@@ -3,10 +3,12 @@ import { prisma } from "@/lib/prisma";
 import { HomeworkCard } from "@/components/public/HomeworkCard";
 import { Reveal } from "@/components/ui/Reveal";
 import { CountUp } from "@/components/ui/CountUp";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export default async function HomePage() {
-  const [homeworkCount, announcementCount, subjectCount, gradeCount, latestHomework, importantAnnouncements, grades] =
+  const [siteSettings, homeworkCount, announcementCount, subjectCount, gradeCount, latestHomework, importantAnnouncements, grades] =
     await Promise.all([
+      getSiteSettings(),
       prisma.homework.count(),
       prisma.announcement.count(),
       prisma.subject.count(),
@@ -89,6 +91,16 @@ export default async function HomePage() {
           ))}
         </div>
       </div>
+
+      {/* Welcome message -- admin-editable via /admin/settings */}
+      <section className="max-w-5xl mx-auto px-6 pt-16">
+        <Reveal>
+          <div className="bg-white rounded-card shadow-card p-6 md:p-8 border-r-4 border-gold-500 flex flex-col gap-2">
+            <h2 className="text-sm font-bold text-navy-900">كلمة ترحيب</h2>
+            <p className="text-navy-700 text-sm leading-8">{siteSettings.welcomeMessage}</p>
+          </div>
+        </Reveal>
+      </section>
 
       {/* Latest homework */}
       <section className="max-w-5xl mx-auto px-6 py-16">
