@@ -136,6 +136,14 @@ model GradeSection {
   scheduleFileSizeKb Int?
   scheduleUpdatedAt  DateTime?
 
+  // Free-text note, primarily meant for today's absent students ("الغائبون
+  // اليوم: ..."), but not schema-enforced to be attendance-only -- the
+  // admin can write anything short here. One box per section, always
+  // overwritten (not a running log) -- matches how a physical
+  // whiteboard note in a classroom works.
+  note          String?   @db.Text
+  noteUpdatedAt DateTime?
+
   @@unique([gradeId, name])
   @@map("grade_sections")
 }

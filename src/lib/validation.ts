@@ -92,6 +92,10 @@ export const siteSettingsUpdateSchema = z.object({
   mapQuery: z.string().min(2, "حدد موقعاً على الخريطة").max(300),
 });
 
+export const sectionNoteUpdateSchema = z.object({
+  note: z.string().max(2000, "الملاحظة طويلة جداً").nullable(),
+});
+
 export const searchQuerySchema = z.object({
   q: z.string().max(200).default(""),
   gradeId: z.string().cuid().optional(),

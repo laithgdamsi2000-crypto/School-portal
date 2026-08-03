@@ -24,6 +24,7 @@ export default async function AdminGradesPage() {
         scheduleFileName: s.scheduleFileName,
         scheduleFileUrl: s.scheduleFileUrl,
         scheduleFileType: s.scheduleFileType,
+        note: s.note,
       })),
     }))
   );
