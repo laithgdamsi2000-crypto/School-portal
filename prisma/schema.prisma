@@ -108,22 +108,36 @@ model Grade {
   order     Int      @default(0) // controls display order
   createdAt DateTime @default(now())
 
-  // Class timetable ("الجداول") -- at most one per grade, a plain image or
-  // PDF the admin uploads. Not a separate table (unlike HomeworkFile/
-  // AnnouncementFile) because it's a strict 1:1: uploading a new one
-  // replaces the previous file rather than accumulating a list.
+  homeworks     Homework[]
+  announcements Announcement[]
+  subjects      Subject[]
+  students      Student[]
+  sections      GradeSection[]
+
+  @@map("grades")
+}
+
+// A class branch/section within a grade ("Grade 1 - A", "Grade 1 - B" ...).
+// Fixed at 3 per grade (A/B/C), lazily created the first time a grade is
+// viewed rather than via a seed step -- see lib/grade-sections.ts. Only
+// the class timetable is section-specific today; homework and
+// announcements stay grade-wide (a deliberate scope decision, not an
+// oversight -- see the PR that introduced this).
+model GradeSection {
+  id      String @id @default(cuid())
+  gradeId String
+  grade   Grade  @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+  name    String // "A", "B", "C"
+  order   Int    @default(0)
+
   scheduleFileName   String?
   scheduleFileUrl    String?
   scheduleFileType   String?
   scheduleFileSizeKb Int?
   scheduleUpdatedAt  DateTime?
 
-  homeworks     Homework[]
-  announcements Announcement[]
-  subjects      Subject[]
-  students      Student[]
-
-  @@map("grades")
+  @@unique([gradeId, name])
+  @@map("grade_sections")
 }
 
 model Subject {

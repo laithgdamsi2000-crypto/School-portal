@@ -19,10 +19,9 @@ async function deleteFileFromDisk(fileUrl: string) {
 }
 
 /**
- * POST /api/grades/[id]/schedule — admin only, multipart/form-data with
- * one "file" entry. A grade has at most one schedule: uploading a new
- * one replaces the previous file (both the DB fields and the old file
- * on disk), it doesn't accumulate a list.
+ * POST /api/sections/[id]/schedule — admin only, multipart/form-data
+ * with one "file" entry. A section has at most one schedule: uploading
+ * a new one replaces the previous file (DB fields + old file on disk).
  */
 export async function POST(req: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
@@ -30,9 +29,9 @@ export async function POST(req: NextRequest, { params }: Params) {
     return NextResponse.json({ error: "غير مصرح" }, { status: 401 });
   }
 
-  const grade = await prisma.grade.findUnique({ where: { id: params.id } });
-  if (!grade) {
-    return NextResponse.json({ error: "الصف غير موجود" }, { status: 404 });
+  const section = await prisma.gradeSection.findUnique({ where: { id: params.id } });
+  if (!section) {
+    return NextResponse.json({ error: "الشعبة غير موجودة" }, { status: 404 });
   }
 
   const formData = await req.formData();
@@ -44,11 +43,11 @@ export async function POST(req: NextRequest, { params }: Params) {
   try {
     const uploaded = await uploadFile(file, "schedules");
 
-    if (grade.scheduleFileUrl) {
-      await deleteFileFromDisk(grade.scheduleFileUrl);
+    if (section.scheduleFileUrl) {
+      await deleteFileFromDisk(section.scheduleFileUrl);
     }
 
-    const updated = await prisma.grade.update({
+    const updated = await prisma.gradeSection.update({
       where: { id: params.id },
       data: {
         scheduleFileName: uploaded.fileName,
@@ -64,28 +63,28 @@ export async function POST(req: NextRequest, { params }: Params) {
     if (err instanceof UploadError) {
       return NextResponse.json({ error: err.message }, { status: 400 });
     }
-    console.error("POST /api/grades/[id]/schedule failed:", err);
+    console.error("POST /api/sections/[id]/schedule failed:", err);
     return NextResponse.json({ error: "تعذر رفع الملف" }, { status: 500 });
   }
 }
 
-/** DELETE /api/grades/[id]/schedule — admin only. Removes the current schedule. */
+/** DELETE /api/sections/[id]/schedule — admin only. Removes the current schedule. */
 export async function DELETE(_req: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
   if (!session || (session.user as any).role !== "admin") {
     return NextResponse.json({ error: "غير مصرح" }, { status: 401 });
   }
 
-  const grade = await prisma.grade.findUnique({ where: { id: params.id } });
-  if (!grade) {
-    return NextResponse.json({ error: "الصف غير موجود" }, { status: 404 });
+  const section = await prisma.gradeSection.findUnique({ where: { id: params.id } });
+  if (!section) {
+    return NextResponse.json({ error: "الشعبة غير موجودة" }, { status: 404 });
   }
 
-  if (grade.scheduleFileUrl) {
-    await deleteFileFromDisk(grade.scheduleFileUrl);
+  if (section.scheduleFileUrl) {
+    await deleteFileFromDisk(section.scheduleFileUrl);
   }
 
-  const updated = await prisma.grade.update({
+  const updated = await prisma.gradeSection.update({
     where: { id: params.id },
     data: {
       scheduleFileName: null,

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { SubjectsManager } from "@/components/dashboard/SubjectsManager";
 import { TeachersManager } from "@/components/dashboard/TeachersManager";
 import { GradeSchedulesManager } from "@/components/dashboard/GradeSchedulesManager";
+import { getSectionsForGrade } from "@/lib/grade-sections";
 
 export default async function AdminGradesPage() {
   const [grades, subjects, teachers] = await Promise.all([
@@ -13,6 +14,20 @@ export default async function AdminGradesPage() {
     }),
   ]);
 
+  const gradesWithSections = await Promise.all(
+    grades.map(async (g) => ({
+      id: g.id,
+      name: g.name,
+      sections: (await getSectionsForGrade(g.id)).map((s) => ({
+        id: s.id,
+        name: s.name,
+        scheduleFileName: s.scheduleFileName,
+        scheduleFileUrl: s.scheduleFileUrl,
+        scheduleFileType: s.scheduleFileType,
+      })),
+    }))
+  );
+
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -21,18 +36,10 @@ export default async function AdminGradesPage() {
       </div>
 
       <div>
-        <h2 className="text-sm font-bold text-navy-900 mb-4">الصفوف والجداول</h2>
-        <GradeSchedulesManager
-          initialGrades={grades.map((g) => ({
-            id: g.id,
-            name: g.name,
-            scheduleFileName: g.scheduleFileName,
-            scheduleFileUrl: g.scheduleFileUrl,
-            scheduleFileType: g.scheduleFileType,
-          }))}
-        />
+        <h2 className="text-sm font-bold text-navy-900 mb-4">الصفوف والشعب والجداول</h2>
+        <GradeSchedulesManager initialGrades={gradesWithSections} />
         <p className="text-xs text-navy-300 mt-2">
-          الصفوف ثابتة حسب النظام التعليمي الليبي (12 صفاً) ولا يمكن إضافة أو حذف صفوف من هنا — يمكن فقط رفع جدول الحصص لكل صف
+          الصفوف ثابتة حسب النظام التعليمي الليبي (12 صفاً)، وكل صف مقسّم لثلاث شعب (A/B/C) — يمكن رفع جدول حصص منفصل لكل شعبة
         </p>
       </div>
 

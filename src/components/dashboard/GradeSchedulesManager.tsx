@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { FileText } from "lucide-react";
 
-interface GradeSchedule {
+interface Section {
   id: string;
   name: string;
   scheduleFileName: string | null;
@@ -11,36 +11,44 @@ interface GradeSchedule {
   scheduleFileType: string | null;
 }
 
-export function GradeSchedulesManager({ initialGrades }: { initialGrades: GradeSchedule[] }) {
+interface GradeWithSections {
+  id: string;
+  name: string;
+  sections: Section[];
+}
+
+export function GradeSchedulesManager({ initialGrades }: { initialGrades: GradeWithSections[] }) {
   const [grades, setGrades] = useState(initialGrades);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
 
-  async function handleUpload(gradeId: string, file: File) {
+  function updateSection(sectionId: string, patch: Partial<Section>) {
+    setGrades((prev) =>
+      prev.map((g) => ({
+        ...g,
+        sections: g.sections.map((s) => (s.id === sectionId ? { ...s, ...patch } : s)),
+      }))
+    );
+  }
+
+  async function handleUpload(sectionId: string, file: File) {
     setError(null);
-    setBusyId(gradeId);
+    setBusyId(sectionId);
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await fetch(`/api/grades/${gradeId}/schedule`, { method: "POST", body: formData });
+      const res = await fetch(`/api/sections/${sectionId}/schedule`, { method: "POST", body: formData });
       if (!res.ok) {
         const body = await res.json();
         throw new Error(body.error ?? "تعذر رفع الملف");
       }
       const updated = await res.json();
-      setGrades((prev) =>
-        prev.map((g) =>
-          g.id === gradeId
-            ? {
-                ...g,
-                scheduleFileName: updated.scheduleFileName,
-                scheduleFileUrl: updated.scheduleFileUrl,
-                scheduleFileType: updated.scheduleFileType,
-              }
-            : g
-        )
-      );
+      updateSection(sectionId, {
+        scheduleFileName: updated.scheduleFileName,
+        scheduleFileUrl: updated.scheduleFileUrl,
+        scheduleFileType: updated.scheduleFileType,
+      });
     } catch (err: any) {
       setError(err.message ?? "تعذر رفع الملف");
     } finally {
@@ -48,22 +56,16 @@ export function GradeSchedulesManager({ initialGrades }: { initialGrades: GradeS
     }
   }
 
-  async function handleDelete(gradeId: string) {
+  async function handleDelete(sectionId: string) {
     setError(null);
-    setBusyId(gradeId);
+    setBusyId(sectionId);
     try {
-      const res = await fetch(`/api/grades/${gradeId}/schedule`, { method: "DELETE" });
+      const res = await fetch(`/api/sections/${sectionId}/schedule`, { method: "DELETE" });
       if (!res.ok) {
         const body = await res.json();
         throw new Error(body.error ?? "تعذر حذف الجدول");
       }
-      setGrades((prev) =>
-        prev.map((g) =>
-          g.id === gradeId
-            ? { ...g, scheduleFileName: null, scheduleFileUrl: null, scheduleFileType: null }
-            : g
-        )
-      );
+      updateSection(sectionId, { scheduleFileName: null, scheduleFileUrl: null, scheduleFileType: null });
     } catch (err: any) {
       setError(err.message ?? "تعذر حذف الجدول");
     } finally {
@@ -79,54 +81,63 @@ export function GradeSchedulesManager({ initialGrades }: { initialGrades: GradeS
         </div>
       )}
       {grades.map((g) => (
-        <div key={g.id} className="flex items-center justify-between gap-4 px-5 py-3.5">
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-navy-900">{g.name}</p>
-            {g.scheduleFileUrl ? (
-              <a
-                href={g.scheduleFileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs text-sky-700 hover:underline mt-0.5"
-              >
-                <FileText size={13} strokeWidth={2} aria-hidden="true" />
-                <span className="truncate max-w-[200px]">{g.scheduleFileName}</span>
-              </a>
-            ) : (
-              <p className="text-xs text-navy-300 mt-0.5">لا يوجد جدول مرفوع</p>
-            )}
-          </div>
+        <div key={g.id} className="px-5 py-3.5">
+          <p className="text-sm font-bold text-navy-900 mb-2">{g.name}</p>
+          <div className="flex flex-col gap-2">
+            {g.sections.map((s) => (
+              <div key={s.id} className="flex items-center justify-between gap-4 bg-navy-50/50 rounded-control px-3 py-2">
+                <div className="min-w-0 flex items-center gap-2">
+                  <span className="text-xs font-medium text-navy-700 bg-white border border-navy-100 rounded-control w-7 h-7 flex items-center justify-center shrink-0">
+                    {s.name}
+                  </span>
+                  {s.scheduleFileUrl ? (
+                    <a
+                      href={s.scheduleFileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-xs text-sky-700 hover:underline min-w-0"
+                    >
+                      <FileText size={13} strokeWidth={2} aria-hidden="true" />
+                      <span className="truncate max-w-[160px]">{s.scheduleFileName}</span>
+                    </a>
+                  ) : (
+                    <p className="text-xs text-navy-300">لا يوجد جدول مرفوع</p>
+                  )}
+                </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <input
-              ref={(el) => { fileInputs.current[g.id] = el; }}
-              type="file"
-              accept="image/*,.pdf,.doc,.docx"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleUpload(g.id, file);
-                e.target.value = "";
-              }}
-            />
-            <button
-              type="button"
-              disabled={busyId === g.id}
-              onClick={() => fileInputs.current[g.id]?.click()}
-              className="text-xs font-medium px-3 py-1.5 rounded-control bg-navy-50 text-navy-700 hover:bg-navy-100 transition disabled:opacity-50"
-            >
-              {busyId === g.id ? "..." : g.scheduleFileUrl ? "استبدال" : "رفع"}
-            </button>
-            {g.scheduleFileUrl && (
-              <button
-                type="button"
-                disabled={busyId === g.id}
-                onClick={() => handleDelete(g.id)}
-                className="text-xs font-medium px-3 py-1.5 rounded-control bg-navy-50 text-navy-700 hover:bg-red-50 hover:text-status-error transition disabled:opacity-50"
-              >
-                حذف
-              </button>
-            )}
+                <div className="flex items-center gap-2 shrink-0">
+                  <input
+                    ref={(el) => { fileInputs.current[s.id] = el; }}
+                    type="file"
+                    accept="image/*,.pdf,.doc,.docx"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleUpload(s.id, file);
+                      e.target.value = "";
+                    }}
+                  />
+                  <button
+                    type="button"
+                    disabled={busyId === s.id}
+                    onClick={() => fileInputs.current[s.id]?.click()}
+                    className="text-xs font-medium px-2.5 py-1 rounded-control bg-white text-navy-700 hover:bg-navy-100 transition disabled:opacity-50"
+                  >
+                    {busyId === s.id ? "..." : s.scheduleFileUrl ? "استبدال" : "رفع"}
+                  </button>
+                  {s.scheduleFileUrl && (
+                    <button
+                      type="button"
+                      disabled={busyId === s.id}
+                      onClick={() => handleDelete(s.id)}
+                      className="text-xs font-medium px-2.5 py-1 rounded-control bg-white text-navy-700 hover:bg-red-50 hover:text-status-error transition disabled:opacity-50"
+                    >
+                      حذف
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       ))}
