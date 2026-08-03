@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { HomeworkCard } from "@/components/public/HomeworkCard";
@@ -10,7 +10,21 @@ interface SearchResults {
   announcements: any[];
 }
 
+/**
+ * useSearchParams() requires a Suspense boundary above it in Next.js App
+ * Router — without this wrapper, the build fails during static generation
+ * because Next.js can't determine the search params at build time and
+ * needs somewhere to fall back to while the real value loads client-side.
+ */
 export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="max-w-4xl mx-auto px-6 py-12 text-sm text-navy-500">جاري التحميل...</div>}>
+      <SearchPageContent />
+    </Suspense>
+  );
+}
+
+function SearchPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialQ = searchParams.get("q") ?? "";
