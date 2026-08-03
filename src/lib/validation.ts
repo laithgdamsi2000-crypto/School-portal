@@ -65,6 +65,10 @@ export const teacherCreateSchema = z.object({
   phone: z.string().max(20).optional().nullable(),
 });
 
+export const teacherUpdateSchema = teacherCreateSchema.partial().extend({
+  isActive: z.boolean().optional(),
+});
+
 export const searchQuerySchema = z.object({
   q: z.string().max(200).default(""),
   gradeId: z.string().cuid().optional(),
