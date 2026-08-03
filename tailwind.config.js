@@ -55,6 +55,15 @@ module.exports = {
         card: "0 2px 10px -2px rgba(10, 27, 48, 0.08), 0 1px 3px -1px rgba(10, 27, 48, 0.06)",
         "card-hover": "0 8px 24px -4px rgba(10, 27, 48, 0.12), 0 2px 6px -2px rgba(10, 27, 48, 0.08)",
       },
+      keyframes: {
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "fade-in-up": "fadeInUp 0.7s ease-out both",
+      },
     },
   },
   plugins: [],
