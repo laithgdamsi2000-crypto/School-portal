@@ -7,7 +7,7 @@ import { FilesManagerList, type FileRow } from "@/components/dashboard/FilesMana
  * need to see and manage the same combined set, plus a delete action.
  */
 export default async function AdminFilesPage() {
-  const [homeworkFiles, announcementFiles] = await Promise.all([
+  const [homeworkFiles, announcementFiles, generalFiles] = await Promise.all([
     prisma.homeworkFile.findMany({
       include: { homework: { include: { grade: true, subject: true } } },
       orderBy: { uploadedAt: "desc" },
@@ -16,6 +16,7 @@ export default async function AdminFilesPage() {
       include: { announcement: true },
       orderBy: { uploadedAt: "desc" },
     }),
+    prisma.generalFile.findMany({ orderBy: { uploadedAt: "desc" } }),
   ]);
 
   const dateFormatter = new Intl.DateTimeFormat("ar-LY");
@@ -41,6 +42,16 @@ export default async function AdminFilesPage() {
       title: f.announcement.title,
       context: "إعلان",
     })),
+    ...generalFiles.map((f) => ({
+      id: f.id,
+      type: "general" as const,
+      fileName: f.fileName,
+      fileUrl: f.fileUrl,
+      fileType: f.fileType,
+      uploadedAt: f.uploadedAt,
+      title: f.title,
+      context: "ملف عام",
+    })),
   ].sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime());
 
   const files: FileRow[] = combined.map(({ uploadedAt, ...rest }) => ({
@@ -52,7 +63,7 @@ export default async function AdminFilesPage() {
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-xl font-bold text-navy-900">إدارة الملفات</h1>
-        <p className="text-navy-500 text-sm mt-1">جميع الملفات المرفوعة مع الواجبات والإعلانات</p>
+        <p className="text-navy-500 text-sm mt-1">ملفات الواجبات والإعلانات، بالإضافة لرفع ملفات عامة (استمارات، تعاميم...)</p>
       </div>
       <FilesManagerList files={files} />
     </div>

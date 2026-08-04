@@ -13,7 +13,7 @@ const FILE_TYPE_LABEL: Record<string, string> = {
  * "File Center" section.
  */
 export default async function DownloadsPage() {
-  const [homeworkFiles, announcementFiles] = await Promise.all([
+  const [homeworkFiles, announcementFiles, generalFiles] = await Promise.all([
     prisma.homeworkFile.findMany({
       include: { homework: { include: { grade: true, subject: true } } },
       orderBy: { uploadedAt: "desc" },
@@ -24,6 +24,7 @@ export default async function DownloadsPage() {
       orderBy: { uploadedAt: "desc" },
       take: 50,
     }),
+    prisma.generalFile.findMany({ orderBy: { uploadedAt: "desc" }, take: 50 }),
   ]);
 
   const combined = [
@@ -44,6 +45,15 @@ export default async function DownloadsPage() {
       uploadedAt: f.uploadedAt,
       context: "إعلان",
       title: f.announcement.title,
+    })),
+    ...generalFiles.map((f) => ({
+      id: f.id,
+      fileName: f.fileName,
+      fileUrl: f.fileUrl,
+      fileType: f.fileType,
+      uploadedAt: f.uploadedAt,
+      context: "ملف عام",
+      title: f.title,
     })),
   ].sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime());
 

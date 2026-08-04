@@ -32,7 +32,7 @@ function classifyMimeType(mime: string): "image" | "pdf" | "docx" {
  */
 export async function uploadFile(
   file: File,
-  subfolder: "homework" | "announcements" | "schedules"
+  subfolder: "homework" | "announcements" | "schedules" | "general"
 ): Promise<UploadedFileResult> {
   if (!ALLOWED_FILE_TYPES.includes(file.type as any)) {
     throw new UploadError(
