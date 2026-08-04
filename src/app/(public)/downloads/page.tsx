@@ -6,6 +6,7 @@ const FILE_TYPE_LABEL: Record<string, string> = {
   image: "صورة",
   pdf: "PDF",
   docx: "Word",
+  excel: "Excel",
 };
 
 /**

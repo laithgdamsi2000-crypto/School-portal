@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { announcementUpdateSchema } from "@/lib/validation";
+import { deleteUploadedFile } from "@/lib/upload";
 import { ZodError } from "zod";
 
 interface Params {
@@ -53,16 +54,27 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   }
 }
 
+/**
+ * DELETE /api/announcements/[id] — admin only.
+ * AnnouncementFile rows cascade-delete via the schema's onDelete: Cascade,
+ * but the actual files in Blob storage need explicit cleanup here so
+ * orphaned files don't accumulate silently.
+ */
 export async function DELETE(_req: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
   if (!session || (session.user as any).role !== "admin") {
     return NextResponse.json({ error: "غير مصرح" }, { status: 401 });
   }
 
-  const existing = await prisma.announcement.findUnique({ where: { id: params.id } });
+  const existing = await prisma.announcement.findUnique({
+    where: { id: params.id },
+    include: { files: true },
+  });
   if (!existing) {
     return NextResponse.json({ error: "الإعلان غير موجود" }, { status: 404 });
   }
+
+  await Promise.all(existing.files.map((f) => deleteUploadedFile(f.fileUrl)));
 
   await prisma.announcement.delete({ where: { id: params.id } });
 

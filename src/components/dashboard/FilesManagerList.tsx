@@ -17,6 +17,7 @@ const FILE_TYPE_LABEL: Record<string, string> = {
   image: "صورة",
   pdf: "PDF",
   docx: "Word",
+  excel: "Excel",
 };
 
 export function FilesManagerList({ files }: { files: FileRow[] }) {
@@ -121,7 +122,7 @@ export function FilesManagerList({ files }: { files: FileRow[] }) {
             id="fileInput"
             ref={fileInputRef}
             type="file"
-            accept="image/*,.pdf,.doc,.docx"
+            accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
             onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
             className="text-sm text-navy-500"
             required

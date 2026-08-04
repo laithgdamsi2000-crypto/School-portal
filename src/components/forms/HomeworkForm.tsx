@@ -221,7 +221,7 @@ export function HomeworkForm({ mode, homeworkId, initial }: HomeworkFormProps) {
           id="files"
           type="file"
           multiple
-          accept="image/*,.pdf,.doc,.docx"
+          accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
           onChange={(e) => setFiles(e.target.files)}
           className="text-sm text-navy-500"
         />

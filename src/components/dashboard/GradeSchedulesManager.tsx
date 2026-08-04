@@ -138,7 +138,7 @@ export function GradeSchedulesManager({ initialGrades }: { initialGrades: GradeW
                     <input
                       ref={(el) => { fileInputs.current[s.id] = el; }}
                       type="file"
-                      accept="image/*,.pdf,.doc,.docx"
+                      accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
                       className="hidden"
                       onChange={(e) => {
                         const file = e.target.files?.[0];

@@ -1,27 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { unlink } from "fs/promises";
-import path from "path";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { uploadFile, UploadError } from "@/lib/upload";
+import { uploadFile, deleteUploadedFile, UploadError } from "@/lib/upload";
 
 interface Params {
   params: { id: string };
 }
 
-async function deleteFileFromDisk(fileUrl: string) {
-  try {
-    await unlink(path.join(process.cwd(), "public", fileUrl));
-  } catch {
-    // Already gone or on ephemeral storage -- not fatal.
-  }
-}
-
 /**
  * POST /api/sections/[id]/schedule — admin only, multipart/form-data
  * with one "file" entry. A section has at most one schedule: uploading
- * a new one replaces the previous file (DB fields + old file on disk).
+ * a new one replaces the previous file (DB fields + old blob).
  */
 export async function POST(req: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
@@ -44,7 +34,7 @@ export async function POST(req: NextRequest, { params }: Params) {
     const uploaded = await uploadFile(file, "schedules");
 
     if (section.scheduleFileUrl) {
-      await deleteFileFromDisk(section.scheduleFileUrl);
+      await deleteUploadedFile(section.scheduleFileUrl);
     }
 
     const updated = await prisma.gradeSection.update({
@@ -81,7 +71,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
   }
 
   if (section.scheduleFileUrl) {
-    await deleteFileFromDisk(section.scheduleFileUrl);
+    await deleteUploadedFile(section.scheduleFileUrl);
   }
 
   const updated = await prisma.gradeSection.update({

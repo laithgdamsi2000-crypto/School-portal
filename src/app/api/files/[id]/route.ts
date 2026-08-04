@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { unlink } from "fs/promises";
-import path from "path";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { deleteUploadedFile } from "@/lib/upload";
 
 interface Params {
   params: { id: string };
@@ -13,9 +12,7 @@ interface Params {
  * DELETE /api/files/[id]?type=homework|announcement|general — admin
  * only. These are three separate tables (see schema), so the caller
  * must say which one this id belongs to. Deletes the DB row first,
- * then best-effort removes the file from disk -- a missing file on
- * disk (e.g. after a Vercel redeploy, since local storage is ephemeral
- * there -- see DEPLOYMENT.md) is not treated as a failure.
+ * then best-effort removes the file from Blob storage.
  */
 export async function DELETE(req: NextRequest, { params }: Params) {
   const session = await getServerSession(authOptions);
@@ -47,11 +44,7 @@ export async function DELETE(req: NextRequest, { params }: Params) {
     await prisma.generalFile.delete({ where: { id: params.id } });
   }
 
-  try {
-    await unlink(path.join(process.cwd(), "public", file.fileUrl));
-  } catch {
-    // Already gone or on ephemeral storage -- not fatal, the DB row is the source of truth.
-  }
+  await deleteUploadedFile(file.fileUrl);
 
   return NextResponse.json({ success: true });
 }
