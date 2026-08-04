@@ -96,7 +96,7 @@ export default async function HomePage() {
       <section className="max-w-5xl mx-auto px-6 pt-16">
         <Reveal>
           <div className="bg-white rounded-card shadow-card p-6 md:p-8 border-r-4 border-gold-500 flex flex-col gap-2">
-            <h2 className="text-sm font-bold text-navy-900">كلمة ترحيب</h2>
+            <h2 className="text-sm font-bold text-navy-900">أهلاً بكم في مدرسة العنقاء</h2>
             <p className="text-navy-700 text-sm leading-8">{siteSettings.welcomeMessage}</p>
           </div>
         </Reveal>
