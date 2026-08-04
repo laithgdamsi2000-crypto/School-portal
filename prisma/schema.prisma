@@ -291,6 +291,23 @@ model SiteSettings {
   @@map("site_settings")
 }
 
+// A file uploaded directly from the admin File Manager, not attached
+// to any homework or announcement (school forms, circulars, general
+// downloads). Needs its own `title` since -- unlike HomeworkFile/
+// AnnouncementFile -- there's no parent record to borrow a display
+// name from.
+model GeneralFile {
+  id         String   @id @default(cuid())
+  title      String
+  fileName   String
+  fileUrl    String
+  fileType   String
+  fileSizeKb Int
+  uploadedAt DateTime @default(now())
+
+  @@map("general_files")
+}
+
 // ------------------------------------------------------------
 // NOTIFICATIONS (architecture only — see lib/notifications.ts)
 // ------------------------------------------------------------
