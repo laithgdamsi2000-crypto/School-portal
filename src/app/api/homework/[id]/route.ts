@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { homeworkUpdateSchema } from "@/lib/validation";
+import { deleteUploadedFile } from "@/lib/upload";
 import { ZodError } from "zod";
 
 interface Params {
@@ -76,8 +77,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
     return NextResponse.json({ error: "الواجب غير موجود" }, { status: 404 });
   }
 
-  // TODO when moving to object storage: delete existing.files[].fileUrl
-  // from the bucket here before removing the DB rows.
+  await Promise.all(existing.files.map((f) => deleteUploadedFile(f.fileUrl)));
 
   await prisma.homework.delete({ where: { id: params.id } });
 
