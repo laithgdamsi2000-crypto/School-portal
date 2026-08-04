@@ -96,40 +96,42 @@ export default async function AdminHomeworkListPage({ searchParams }: Props) {
         {items.length === 0 ? (
           <p className="text-sm text-navy-300 py-12 text-center">لا توجد نتائج</p>
         ) : (
-          <table className="w-full text-sm" style={{ tableLayout: "fixed" }}>
-            <thead>
-              <tr className="border-b border-navy-50 text-navy-500 text-xs">
-                <th className="text-right py-3 px-4 font-medium">العنوان</th>
-                <th className="text-right py-3 px-4 font-medium w-28">الصف</th>
-                <th className="text-right py-3 px-4 font-medium w-32">المادة</th>
-                <th className="text-right py-3 px-4 font-medium w-28 ltr-nums">تاريخ التسليم</th>
-                <th className="text-right py-3 px-4 font-medium w-20">الحالة</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((hw) => (
-                <tr key={hw.id} className="border-b border-navy-50 last:border-0 hover:bg-navy-50 transition">
-                  <td className="py-3 px-4">
-                    <Link href={`/admin/homework/${hw.id}/edit`} className="font-medium text-navy-900 hover:text-sky-700 truncate block">
-                      {hw.title}
-                    </Link>
-                  </td>
-                  <td className="py-3 px-4 text-navy-500 truncate">{hw.grade.name}</td>
-                  <td className="py-3 px-4 text-navy-500 truncate">{hw.subject.name}</td>
-                  <td className="py-3 px-4 text-navy-500 ltr-nums">
-                    {new Intl.DateTimeFormat("ar-LY").format(hw.dueDate)}
-                  </td>
-                  <td className="py-3 px-4">
-                    {hw.status === "IMPORTANT" ? (
-                      <span className="text-[11px] font-bold bg-red-50 text-status-error px-2.5 py-1 rounded-full">مهم</span>
-                    ) : (
-                      <span className="text-[11px] font-medium bg-sky-50 text-sky-700 px-2.5 py-1 rounded-full">عادي</span>
-                    )}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[640px]" style={{ tableLayout: "fixed" }}>
+              <thead>
+                <tr className="border-b border-navy-50 text-navy-500 text-xs">
+                  <th className="text-right py-3 px-4 font-medium">العنوان</th>
+                  <th className="text-right py-3 px-4 font-medium w-28">الصف</th>
+                  <th className="text-right py-3 px-4 font-medium w-32">المادة</th>
+                  <th className="text-right py-3 px-4 font-medium w-28 ltr-nums">تاريخ التسليم</th>
+                  <th className="text-right py-3 px-4 font-medium w-20">الحالة</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {items.map((hw) => (
+                  <tr key={hw.id} className="border-b border-navy-50 last:border-0 hover:bg-navy-50 transition">
+                    <td className="py-3 px-4">
+                      <Link href={`/admin/homework/${hw.id}/edit`} className="font-medium text-navy-900 hover:text-sky-700 truncate block">
+                        {hw.title}
+                      </Link>
+                    </td>
+                    <td className="py-3 px-4 text-navy-500 truncate">{hw.grade.name}</td>
+                    <td className="py-3 px-4 text-navy-500 truncate">{hw.subject.name}</td>
+                    <td className="py-3 px-4 text-navy-500 ltr-nums">
+                      {new Intl.DateTimeFormat("ar-LY").format(hw.dueDate)}
+                    </td>
+                    <td className="py-3 px-4">
+                      {hw.status === "IMPORTANT" ? (
+                        <span className="text-[11px] font-bold bg-red-50 text-status-error px-2.5 py-1 rounded-full">مهم</span>
+                      ) : (
+                        <span className="text-[11px] font-medium bg-sky-50 text-sky-700 px-2.5 py-1 rounded-full">عادي</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 

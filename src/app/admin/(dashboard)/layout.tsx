@@ -33,7 +33,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-navy-50 flex">
+    <div className="min-h-screen bg-navy-50 flex flex-col md:flex-row">
       <DashboardSidebar adminName={session.user?.name ?? "الإدارة"} />
       <main className="flex-1 p-6 md:p-8">
         <PageTransition>{children}</PageTransition>
