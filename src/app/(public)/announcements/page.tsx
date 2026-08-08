@@ -3,6 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { PageHeader } from "@/components/public/PageHeader";
 import { Reveal } from "@/components/ui/Reveal";
 
+// See src/app/(public)/page.tsx for why this is required -- without it,
+// this page is statically frozen at build time and new announcements
+// never appear until the next deploy.
+export const dynamic = "force-dynamic";
+
 export default async function AnnouncementsPage() {
   const announcements = await prisma.announcement.findMany({
     include: { grade: true },
