@@ -3,6 +3,12 @@ import { getSiteSettings } from "@/lib/site-settings";
 import { PageHeader } from "@/components/public/PageHeader";
 import { Reveal } from "@/components/ui/Reveal";
 
+// See src/app/(public)/page.tsx for why this is required -- without it,
+// this page is statically frozen at build time, so admin edits to
+// aboutText via /admin/settings would never actually appear here until
+// the next deploy despite the settings form reporting success.
+export const dynamic = "force-dynamic";
+
 export default async function AboutPage() {
   const settings = await getSiteSettings();
 

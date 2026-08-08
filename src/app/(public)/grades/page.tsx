@@ -4,6 +4,11 @@ import { prisma } from "@/lib/prisma";
 import { PageHeader } from "@/components/public/PageHeader";
 import { Reveal } from "@/components/ui/Reveal";
 
+// See src/app/(public)/page.tsx for why this is required -- without it,
+// this page is statically frozen at build time and homework/announcement
+// counts never update.
+export const dynamic = "force-dynamic";
+
 export default async function GradesIndexPage() {
   const grades = await prisma.grade.findMany({
     orderBy: { order: "asc" },

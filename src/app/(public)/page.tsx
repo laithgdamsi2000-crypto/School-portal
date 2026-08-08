@@ -5,6 +5,13 @@ import { Reveal } from "@/components/ui/Reveal";
 import { CountUp } from "@/components/ui/CountUp";
 import { getSiteSettings } from "@/lib/site-settings";
 
+// Without this, Next.js statically pre-renders this page at build time
+// (nothing here reads a dynamic API like searchParams/cookies to signal
+// otherwise) and serves that frozen snapshot to every visitor -- new
+// homework, announcements, and the admin-edited welcome message would
+// never appear until the next deploy.
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [siteSettings, homeworkCount, announcementCount, subjectCount, gradeCount, latestHomework, importantAnnouncements, grades] =
     await Promise.all([
